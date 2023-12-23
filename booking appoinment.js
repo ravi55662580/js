@@ -44,14 +44,22 @@ function displayUserDetails(userDetails) {
         // Display user details
         listItem.textContent = `Date: ${user.date}, Time: ${user.time}`;
 
-        // Create delete icon
+        // delete icon
         const deleteIcon = document.createElement('span');
         deleteIcon.innerHTML = '&#x274C;'; // Unicode for "cross mark" character
         deleteIcon.style.cursor = 'pointer';
         deleteIcon.onclick = () => deleteAppointment(user._id);
+        
+        // edit icon
+        const editIcon = document.createElement('span');
+        editIcon.innerHTML = '&#x270E;'; // Unicode for "pencil" character
+        editIcon.style.cursor = 'pointer';
+        editIcon.onclick = () => populateEditForm(user);
+
 
         // Append delete icon to the list item
         listItem.appendChild(deleteIcon);
+        listItem.appendChild(editIcon);
 
         // Append list item to the list
         userDetailsList.appendChild(listItem);
@@ -79,6 +87,25 @@ async function deleteAppointment(appointmentId) {
     } catch (error) {
       console.error('Error deleting appointment:', error);
     }
+  }
+
+// Function to populate the edit form with user details
+function populateEditForm(user) {
+    // Create date object from ISO format
+    const dateObject = new Date(user.date);
+  
+    // Get hours and minutes as separate strings
+    const hours = dateObject.getHours().toString().padStart(2, '0');
+    const minutes = dateObject.getMinutes().toString().padStart(2, '0');
+  
+    // Format time as "HH:mm"
+    const formattedTime = `${hours}:${minutes}`;
+  
+    // Get date in "yyyy-MM-dd" format
+    const formattedDate = dateObject.toISOString().split('T')[0];
+  
+    document.getElementById('date').value = formattedDate;
+    document.getElementById('time').value = formattedTime;
   }
 
   // Fetch and display user details when the page loads
